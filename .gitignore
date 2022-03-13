@@ -1,19 +1,21 @@
-# Python
-*.pyc
-*~
-__pycache__
-
 # Env
 .env
 env/
+
+# Python
+*.py[co]
+*~
+__pycache__
 
 # Django
 *.log
 local_settings.py
 db.sqlite3
 
-# Static folder at project root
-/static/
+# Visual Studio
+.vscode/
+.history/
+*.code-workspace
 
 # macOS
 ._*
@@ -26,8 +28,3 @@ Thumbs.db*
 ehthumbs*.db
 [Dd]esktop.ini
 $RECYCLE.BIN/
-
-# Visual Studio
-.vscode/
-.history/
-*.code-workspace
