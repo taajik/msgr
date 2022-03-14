@@ -19,17 +19,20 @@ from django.contrib.auth import views as auth_views
 from django.urls import include, path
 from django.views.generic import TemplateView
 
+
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", TemplateView.as_view(template_name='home.html'), name='home'),
+    path("", TemplateView.as_view(template_name="home.html"), name="home"),
     path("login/",
-         auth_views.LoginView.as_view(next_page='home',
+         auth_views.LoginView.as_view(next_page="home",
                                       redirect_authenticated_user=True),
          name="login"),
     path("logout/",
-         auth_views.LogoutView.as_view(next_page='home'),
+         auth_views.LogoutView.as_view(next_page="home"),
          name="logout"),
+    path("signup/", include("accounts.urls")),
     # path("password_reset/",
     #      auth_views.PasswordResetView.as_view(),
     #      name="password_reset"),
+    path("m/", include("msgr.urls")),
 ]

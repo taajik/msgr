@@ -31,13 +31,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'msgr.apps.MsgrConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'msgr.apps.MsgrConfig',
+    'accounts.apps.AccountsConfig'
 ]
 
 MIDDLEWARE = [

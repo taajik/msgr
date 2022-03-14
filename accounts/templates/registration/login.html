@@ -7,7 +7,7 @@
 <h2>Log In</h2>
 
 {% if form.errors %}
-<p>Your username and password didn't match. Please try again.</p>
+    <p>Your username and password didn't match. Please try again.</p>
 {% endif %}
 
 {% if next %}
@@ -15,7 +15,7 @@
     <p>Your account doesn't have access to this page. To proceed,
     please login with an account that has access.</p>
     {% else %}
-    <p>Please login to see this page.</p>
+    <p>Please log in to see this page.</p>
     {% endif %}
 {% endif %}
 
@@ -31,11 +31,12 @@
 </table>
 
 <br>
-<input type="submit" value="login">
+<input type="submit" value="Log in">
 <input type="hidden" name="next" value="{{ next }}">
 </form>
 
 <br />
-<p><a href="/password_reset">Lost password?</a></p>
+<p><a href="/password_reset">Forgot password?</a></p>
+<p><a href="{% url 'signup' %}">Don't have an account?</a></p>
 
 {% endblock %}
