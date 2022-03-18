@@ -1,13 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}msgr{% endblock %}
-
 {% block content %}
 
 {% if user.is_authenticated %}
     <p>
         Welcome, {{ user.username }}. Thanks for logging in.<br>
-        <a href="{% url 'logout' %}">Log out</a>
+        You can go to <a href="{% url 'profile' %}">your profile</a>
+        or <a href="{% url 'logout' %}">log out</a>.
     </p>
 {% else %}
     <p>

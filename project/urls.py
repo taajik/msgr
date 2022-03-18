@@ -19,18 +19,25 @@ from django.contrib.auth import views as auth_views
 from django.urls import include, path
 from django.views.generic import TemplateView
 
+from accounts import views as account_views
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", TemplateView.as_view(template_name="home.html"), name="home"),
     path("login/",
-         auth_views.LoginView.as_view(next_page="home",
+         auth_views.LoginView.as_view(next_page="profile",
                                       redirect_authenticated_user=True),
          name="login"),
     path("logout/",
          auth_views.LogoutView.as_view(next_page="home"),
          name="logout"),
-    path("signup/", include("accounts.urls")),
+    path("signup/",
+         account_views.SignupView.as_view(),
+         name="signup"),
+    path("profile/",
+         account_views.ProfileView.as_view(),
+         name="profile"),
     # path("password_reset/",
     #      auth_views.PasswordResetView.as_view(),
     #      name="password_reset"),
