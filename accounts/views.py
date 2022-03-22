@@ -2,7 +2,11 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
+from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import CreateView, UpdateView
 
 from .forms import ProfileForm
@@ -16,7 +20,8 @@ class SignupView(CreateView):
     success_url = reverse_lazy("login")
     template_name = "registration/signup.html"
 
-    # todo: decorators like the auth.LoginView
+    @method_decorator(sensitive_post_parameters())
+    @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
         if not self.request.user.is_anonymous:
             return HttpResponseRedirect(reverse("home"))
@@ -45,4 +50,4 @@ class ProfileView(LoginRequiredMixin, UpdateView):
     template_name = "registration/profile.html"
 
     def get_object(self, queryset=None):
-        return Profile.objects.get(user=self.request.user)
+        return get_object_or_404(Profile, user=self.request.user)
