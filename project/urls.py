@@ -24,7 +24,9 @@ from accounts import views as account_views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", TemplateView.as_view(template_name="home.html"), name="home"),
+    path("",
+         TemplateView.as_view(template_name="home.html"),
+         name="home"),
     path("login/",
          auth_views.LoginView.as_view(next_page="profile",
                                       redirect_authenticated_user=True),

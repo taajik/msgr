@@ -4,7 +4,7 @@
 
 {% if user.is_authenticated %}
     <p>
-        Welcome, {{ user.username }}. Thanks for logging in.<br>
+        Welcome. Thanks for logging in.<br>
         You can go to <a href="{% url 'profile' %}">your profile</a>
         or <a href="{% url 'logout' %}">log out</a>.
     </p>

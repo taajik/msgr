@@ -1,9 +1,64 @@
 
 import re
 
-from django.contrib.auth.models import User
+from django.contrib.auth.base_user import BaseUserManager
+from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
 from django.db import models
+
+
+class UserManager(BaseUserManager):
+    """Custom user model manager with email as the unique identifier."""
+
+    def _create_user(self, email, password, **extra_fields):
+        if not email:
+            raise ValueError("The given email must be set")
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_user(self, email, password=None, **extra_fields):
+        extra_fields.setdefault("is_staff", False)
+        extra_fields.setdefault("is_superuser", False)
+
+        return self._create_user(email, password, **extra_fields)
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+        extra_fields.setdefault("is_active", True)
+
+        if extra_fields.get("is_staff") is not True:
+            raise ValueError("Superuser must have is_staff=True.")
+        if extra_fields.get("is_superuser") is not True:
+            raise ValueError("Superuser must have is_superuser=True.")
+
+        return self._create_user(email, password, **extra_fields)
+
+
+class User(AbstractUser):
+    """Custom user model with only email and password fields."""
+
+    username = None
+    first_name = None
+    last_name = None
+    email = models.EmailField("email address", unique=True,)
+
+    objects = UserManager()
+
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []
+
+    def get_full_name(self):
+        return self.email
+
+    def get_short_name(self):
+        return self.email.rsplit('@', 1)[0]
+
+    def __str__(self) -> str:
+        return self.email
 
 
 def validate_id(value):
@@ -14,19 +69,18 @@ def validate_id(value):
     if not re.match("(?!.*__.*)[a-zA-Z][\w_]*[^_ ]$", value):
         raise ValidationError("ID is invalid.")
 
+
 class Profile(models.Model):
     """A user's profile informations."""
 
     user = models.OneToOneField(User, on_delete=models.CASCADE,
-                                related_name="profile", verbose_name="user")
-    first_name = models.CharField(default="new user", max_length=30)
-    last_name = models.CharField(blank=True, max_length=30)
-    email_address = models.EmailField("email", unique=True,
-                                      blank=True, null=True)
-    identifier = models.CharField("id", unique=True, blank=True,
-                                  null=True, max_length=30,
+                                limit_choices_to={"is_staff": False})
+    first_name = models.CharField(max_length=30, default="new user")
+    last_name = models.CharField(max_length=30, blank=True)
+    identifier = models.CharField("id", max_length=30,
+                                  unique=True, blank=True, null=True,
                                   validators=[validate_id])
-    biography = models.CharField("bio", blank=True, max_length=200)
+    biography = models.CharField("bio", max_length=200, blank=True)
 
     def __str__(self) -> str:
-        return "%s's profile" % self.user.username
+        return "%s's profile" % self.user.get_full_name()
