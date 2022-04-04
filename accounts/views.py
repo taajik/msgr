@@ -1,5 +1,4 @@
 
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -9,7 +8,7 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import CreateView, UpdateView
 
-from .forms import ProfileForm
+from .forms import UserCreationForm, ProfileForm
 from .models import Profile
 
 
@@ -24,7 +23,7 @@ class SignupView(CreateView):
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
         if not self.request.user.is_anonymous:
-            return HttpResponseRedirect(reverse("home"))
+            return HttpResponseRedirect(reverse("profile"))
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):

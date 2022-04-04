@@ -44,18 +44,12 @@ class User(AbstractUser):
     username = None
     first_name = None
     last_name = None
-    email = models.EmailField("email address", unique=True,)
+    email = models.EmailField("email address", unique=True)
 
     objects = UserManager()
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
-
-    def get_full_name(self):
-        return self.email
-
-    def get_short_name(self):
-        return self.email.rsplit('@', 1)[0]
 
     def __str__(self) -> str:
         return self.email
@@ -83,4 +77,4 @@ class Profile(models.Model):
     biography = models.CharField("bio", max_length=200, blank=True)
 
     def __str__(self) -> str:
-        return "%s's profile" % self.user.get_full_name()
+        return "%s profile" % self.user.get_username()
