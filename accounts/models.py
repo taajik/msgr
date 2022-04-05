@@ -67,8 +67,7 @@ def validate_id(value):
 class Profile(models.Model):
     """A user's profile informations."""
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE,
-                                limit_choices_to={"is_staff": False})
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=30, default="new user")
     last_name = models.CharField(max_length=30, blank=True)
     identifier = models.CharField("id", max_length=30,

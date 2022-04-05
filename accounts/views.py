@@ -26,19 +26,6 @@ class SignupView(CreateView):
             return HttpResponseRedirect(reverse("profile"))
         return super().dispatch(request, *args, **kwargs)
 
-    def form_valid(self, form):
-        """Before redirecting, create a profile
-        for the successfully created user.
-        """
-
-        response = super().form_valid(form)
-        profile_form = ProfileForm()
-        profile_obj = profile_form.save(commit=False)
-        profile_obj.user = self.object
-        profile_obj.save()
-
-        return response
-
 
 class ProfileView(LoginRequiredMixin, UpdateView):
     """Display the profile of the currently logged in user for editing."""
