@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}msgr{% endblock %}
+
+{% block content %}
+
+<h2>Chats</h2>
+
+<ul>
+{% for chat in object_list %}
+    <li>{{ chat.title }}</li>
+{% empty %}
+    <li>You don't have any chats</li>
+{% endfor %}
+</ul>
+
+{% endblock %}

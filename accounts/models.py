@@ -75,5 +75,16 @@ class Profile(models.Model):
                                   validators=[validate_id])
     biography = models.CharField("bio", max_length=200, blank=True)
 
+    def get_full_name(self):
+        """Return the first_name plus the last_name,
+        with a space in between.
+        """
+        full_name = "%s %s" % (self.first_name, self.last_name)
+        return full_name.strip()
+
+    def get_short_name(self):
+        """Return the short name for the user."""
+        return self.first_name
+
     def __str__(self) -> str:
         return "%s profile" % self.user.get_username()

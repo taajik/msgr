@@ -1,7 +1,16 @@
 
-from django.views.generic import DetailView
+from django.views.generic import ListView, DetailView
 
 from accounts.models import Profile
+
+
+class ChatsView(ListView):
+    """Main page list of a user's chat entries."""
+
+    template_name = "msgr/chats_list.html"
+
+    def get_queryset(self):
+        return self.request.user.joins.order_by("chat__lat")
 
 
 class ProfilePageView(DetailView):
