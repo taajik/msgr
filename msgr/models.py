@@ -4,23 +4,6 @@ from django.db import models
 from django.utils import timezone
 
 
-# class UserDo(settings.AUTH_USER_MODEL):
-#     """A proxy model to do messaging related actions in behalf of a user."""
-
-#     class Meta:
-#         proxy = True
-
-#     def get_chats(self):
-#         self.joins.order_by("chat__lat")
-
-#     def get_private_chats(self):
-#         return self.chats.filter()
-
-#     def start_chat_with(self, other):
-#         chat = Chat.objects.create()
-#         chat.participants.set([self, other])
-
-
 class Chat(models.Model):
     """Parent model representing a chat between multiple users.
 

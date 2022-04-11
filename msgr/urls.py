@@ -16,4 +16,7 @@ urlpatterns = [
     path("users/<int:pk>/chat/",
          views.StartChatView.as_view(),
          name="start_chat"),
+    path("chats/<int:pk>/",
+         views.ChatView.as_view(),
+         name="chat")
 ]

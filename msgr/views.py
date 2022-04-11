@@ -1,7 +1,9 @@
 
 from django.contrib.auth import get_user_model
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.shortcuts import get_object_or_404
+from django.urls import reverse, reverse_lazy
 from django.views.generic import View, ListView, DetailView
 
 from .models import Chat
@@ -25,8 +27,8 @@ class ProfilePageView(DetailView):
 
     template_name = "msgr/profile_page.html"
 
-    def get_queryset(self):
-        return Profile.objects.filter(pk=self.kwargs["pk"])
+    def get_object(self, queryset=None):
+        return get_object_or_404(Profile, pk=self.kwargs["pk"])
 
 
 class StartChatView(View):
@@ -46,3 +48,23 @@ class StartChatView(View):
         else:
             chat.get()
         return HttpResponseRedirect(reverse("msgr:main"))
+
+
+class ChatView(UserPassesTestMixin, DetailView):  # ListView
+
+    template_name = "msgr/chat_page.html"
+
+    permission_denied_message = "Sorry, you can't access this chat."
+    raise_exception = True
+
+    def get_chat(self):
+        return get_object_or_404(Chat, pk=self.kwargs["pk"])
+
+    def get_object(self, queryset=None):
+        return self.get_chat()
+
+    # def get_queryset(self):
+    #     return self.get_chat().messages.all()
+
+    def test_func(self):
+        return self.get_chat().participants.filter(pk=self.request.user.pk).exists()
