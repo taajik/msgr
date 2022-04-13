@@ -4,6 +4,31 @@
 
 {% block content %}
 
-<h2>Chat room number {{ object.pk }}</h2>
+<h2>Chat room number {{ chat.pk }}</h2>
+
+<ul id="messages-list">
+{% for m in message_list %}
+    <li>
+    <b>{{ m.sender.profile.get_short_name }}</b>
+    ({{ m.send_time|time:"H:i" }}):
+    {{ m.content }}
+    {% if m.sender == user %}
+        {% if m.is_seen %}
+            <b><small>✓✓</small></b>
+        {% else %}
+            <b><small>✓</small></b>
+        {% endif %}
+    {% endif %}
+    </li>
+{% empty %}
+    <li>No messages here yet...</li>
+{% endfor %}
+</ul>
+
+<form method="post" action="{{ request.get_full_path }}" id="message-form">
+    {% csrf_token %}
+    {{ form.content }}
+    <input type="submit" value="Send">
+</form>
 
 {% endblock %}
