@@ -18,5 +18,5 @@ urlpatterns = [
          name="start_chat"),
     path("chats/<int:pk>/",
          views.ChatView.as_view(),
-         name="chat")
+         name="chat"),
 ]

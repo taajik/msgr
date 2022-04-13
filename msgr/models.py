@@ -16,6 +16,10 @@ class Chat(models.Model):
                                           related_name="chats")
     lat = models.DateTimeField("latest activity time", default=timezone.now)
 
+    def update_lat(self):
+        self.lat = timezone.now()
+        self.save()
+
     def __str__(self) -> str:
         return "chat object (%s)" % self.pk
 
@@ -46,3 +50,27 @@ class Join(models.Model):
     def title(self):
         """Return a title for the chat's entry"""
         return self.get_receivers().get().profile.get_full_name()
+
+
+class Message(models.Model):
+    """A message sent in a chat.
+
+    Only the 'sender' is specified because 'chat' works as receivers,
+    since audiences of a message are anyone else in the same chat.
+    """
+
+    chat = models.ForeignKey(Chat, on_delete=models.CASCADE,
+                             related_name="messages")
+    sender = models.ForeignKey(settings.AUTH_USER_MODEL,
+                               on_delete=models.CASCADE,
+                               related_name="+")
+    content = models.TextField()
+    send_time = models.DateTimeField(auto_now_add=True)
+    is_seen = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ["send_time"]
+
+    def __str__(self) -> str:
+        return "chat (%s) message by %s" % (self.chat.pk,
+                                          self.sender.get_username())
