@@ -3,6 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block scripts %}
+    {% endblock %}
     <title>{% block title %}msgr{% endblock %}</title>
 </head>
 
@@ -11,5 +13,7 @@
         {% block content %}
         {% endblock %}
     </main>
+    {% block javascript %}
+    {% endblock %}
 </body>
 </html>

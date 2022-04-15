@@ -1,0 +1,16 @@
+{% for m in message_list %}
+    <li>
+    <b>{{ m.sender.profile.get_short_name }}</b>
+    ({{ m.send_time|time:"H:i" }}):
+    {{ m.content }}
+    {% if m.sender == user %}
+        {% if m.is_seen %}
+            <b><small>✓✓</small></b>
+        {% else %}
+            <b><small>✓</small></b>
+        {% endif %}
+    {% endif %}
+    </li>
+{% empty %}
+    <li>No messages here yet...</li>
+{% endfor %}
