@@ -73,4 +73,4 @@ class Message(models.Model):
 
     def __str__(self) -> str:
         return "chat (%s) message by %s" % (self.chat.pk,
-                                          self.sender.get_username())
+                                            self.sender.get_username())

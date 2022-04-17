@@ -1,7 +1,6 @@
 
 from functools import cached_property
 
-from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.http import HttpResponseRedirect
 from django.http.response import HttpResponse, JsonResponse
@@ -9,7 +8,6 @@ from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.views.generic import (
-    View,
     TemplateView,
     DetailView,
     ListView,
@@ -18,9 +16,6 @@ from django.views.generic import (
 from .forms import MessageForm
 from .models import Chat
 from accounts.models import Profile
-
-
-User = get_user_model()
 
 
 class ChatsListView(ListView):
@@ -40,23 +35,17 @@ class ProfilePageView(DetailView):
     def get_object(self, queryset=None):
         return get_object_or_404(Profile, pk=self.kwargs["pk"])
 
-
-class StartChatView(View):
-    """Create a private chat between the logged-in user and another.
-
-    The other user is identified using its profile pk,
-    that is passed in the url pattern.
-    """
-
     def post(self, request, *args, **kwargs):
-        other = User.objects.get(profile__pk=kwargs["pk"])
+        """Create a private chat between the logged-in user and this use
+        if one doesn't already exists."""
+
+        other = self.get_object().user
         chat = Chat.objects.filter(participants=request.user)
         chat = chat.filter(participants=other)
         if not chat:
             chat = Chat.objects.create()
             chat.participants.set([request.user, other])
-        else:
-            chat.get()
+
         return HttpResponseRedirect(reverse("msgr:main"))
 
 

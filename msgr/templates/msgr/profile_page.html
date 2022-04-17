@@ -16,11 +16,9 @@
     Bio: {{ object.biography }}<br>
 </p>
 
-<form method="post" action="{% url 'msgr:start_chat' view.kwargs.pk %}">
+<form method="post" action="{{ request.get_full_path }}">
     {% csrf_token %}
-    <a href="chat/" onclick="document.forms[0].submit();return false;">
-        <button>Chat</button>
-    </a>
+    <input type="submit" value="Chat">
 </form>
 
 {% endblock %}
