@@ -7,20 +7,34 @@
 
 {% block title %}chat - msgr{% endblock %}
 
+{% block style %}
+<link type="text/css" rel="stylesheet" href="{% static 'msgr/chat_page.css' %}"/>
+{% endblock %}
+
 {% block content %}
+<div class="content">
 
-<h2>Chat room number {{ pk }}</h2>
+<h2 class="text">Chat room number {{ pk }}</h2>
 
-<ul id="messages-list">
-</ul>
+<div id="messages-list">
+</div>
 
 <form method="post" action="{{ request.get_full_path }}" id="message-form">
     {% csrf_token %}
     {{ form.content }}
-    <input type="submit" value="Send">
+    <input type="submit" value="Send" id="message-button">
 </form>
 
-{% endblock %}
+<pre class="whitespace">
+
+
+
+
+
+</pre>
+
+</div>
+{% endblock content %}
 
 {% block javascript %}
 <script>

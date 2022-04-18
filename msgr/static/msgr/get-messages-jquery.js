@@ -8,7 +8,7 @@ function get_messages() {
 
         success: function(json) {
             if (json.latest_pk) {
-                $('#messages-list').append(json.message_items);
+                $('#messages-list').prepend(json.message_items);
                 latest_pk = json.latest_pk;
             }
         },

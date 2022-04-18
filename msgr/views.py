@@ -67,7 +67,7 @@ class ChatView(UserPassesTestMixin, TemplateView):
         if request.GET.get("update"):
             messages = self.get_queryset(request.GET.get("latest_pk"))
             response = render_to_string("msgr/messages_list.html", {
-                "message_list": messages,
+                "message_list": messages.reverse(),
                 "user": request.user,
             })
             return JsonResponse({"message_items": response,

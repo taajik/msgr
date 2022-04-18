@@ -11,7 +11,7 @@ function send_message(form) {
         data: $(form).serialize(),
 
         success: function() {
-            $('#message-content').val('');
+            $('#message-field').val('');
         },
 
         error: function(data) {

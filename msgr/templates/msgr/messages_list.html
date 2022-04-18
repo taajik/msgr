@@ -1,16 +1,22 @@
 {% for m in message_list %}
-    <li>
-    <b>{{ m.sender.profile.get_short_name }}</b>
-    ({{ m.send_time|time:"H:i" }}):
-    {{ m.content }}
-    {% if m.sender == user %}
-        {% if m.is_seen %}
-            <b><small>✓✓</small></b>
-        {% else %}
-            <b><small>✓</small></b>
+{% if m.sender == user %}
+<div class="message right">
+{% else %}
+<div class="message left">
+    <b>{{ m.sender.profile.get_short_name }}</b>:
+{% endif %}
+    <pre>{{ m.content }}</pre>
+    <div class="detail">
+        <sub>{{ m.send_time|time:"H:i" }}</sub>
+        {% if m.sender == user %}
+            <sub>
+            {% if m.is_seen %}
+                ✓✓
+            {% else %}
+                ✓
+            {% endif %}
+            </sub>
         {% endif %}
-    {% endif %}
-    </li>
-{% empty %}
-    <li>No messages here yet...</li>
+    </div>
+</div>
 {% endfor %}

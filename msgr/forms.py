@@ -11,9 +11,10 @@ class MessageForm(forms.ModelForm):
             "content",
         )
         widgets = {
-            "content": forms.TextInput(attrs={
-                "id": "message-content",
+            "content": forms.Textarea(attrs={
+                "id": "message-field",
                 "required": True,
-                "placeholder": "Message..."
+                "placeholder": "Message...",
+                "rows": "1",
             }),
         }

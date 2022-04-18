@@ -1,0 +1,76 @@
+
+body {
+    margin: 0;
+}
+
+@media screen and (min-width: 800px) {
+    .content {
+        width: 30%;
+    }
+    #message-form {
+        width: 30%;
+    }
+}
+
+.content {
+    margin: 0 auto 0;
+    overflow: auto;
+    background-color: #2e1503;
+    border: 5px solid #2e1503;
+}
+
+.text {
+    color: whitesmoke;
+}
+
+#message-form {
+    margin: 0 auto 0;
+    position: fixed;
+    bottom: 0;
+}
+
+#message-field {
+    width: 75%;
+    padding: 8px 8px;
+    border-radius: 10px;
+}
+
+#message-button {
+    display: inline-block;
+    vertical-align: top;
+    width: 15%;
+    padding: 8px 8px;
+    border-radius: 10px;
+}
+
+div.message {
+    display: block;
+    clear: both;
+    margin: 5px 0;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+div.right {
+    float: right;
+    background-color: #99af87;
+}
+
+div.left {
+    float: left;
+    background-color: #bbbbbb;
+}
+
+pre {
+    display: inline;
+}
+
+div.detail {
+    float: right;
+    margin-left: 10px;
+    font-family: 'Courier New', monospace;
+}
+
+.whitespace {
+    float: left;
+}
