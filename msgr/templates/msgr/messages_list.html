@@ -9,7 +9,7 @@
     <div class="detail">
         <sub>{{ m.send_time|time:"H:i" }}</sub>
         {% if m.sender == user %}
-            <sub>
+            <sub id="tick-{{ m.pk }}">
             {% if m.is_seen %}
                 ✓✓
             {% else %}

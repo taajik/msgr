@@ -1,22 +1,30 @@
 
 var latest_pk = 0;
-function get_messages() {
+var latest_seen_pk = 0;
+
+function get_updates() {
     $.ajax({
         url: full_path,
         type: 'GET',
-        data: {update: true, latest_pk: latest_pk},
+        data: {latest_pk: latest_pk, latest_seen_pk: latest_seen_pk},
 
         success: function(json) {
             if (json.latest_pk) {
-                $('#messages-list').prepend(json.message_items);
+                $('#messages-list').prepend(json.new_messages_rendered);
                 latest_pk = json.latest_pk;
+            }
+            if (json.latest_seen_pk) {
+                for (let pk of json.seen_messages_pk) {
+                    $('#tick-'+pk).text("✓✓");
+                }
+                latest_seen_pk = json.latest_seen_pk;
             }
         },
 
         complete: function(data) {
-            setTimeout(get_messages, 1000);
+            setTimeout(get_updates, 1000);
         }
     });
 }
 
-get_messages();
+get_updates();
