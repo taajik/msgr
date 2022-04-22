@@ -15,7 +15,7 @@ function get_updates() {
             }
             if (json.latest_seen_pk) {
                 for (let pk of json.seen_messages_pk) {
-                    $('#tick-'+pk).text("✓✓");
+                    $('#tick-'+pk).text('✓✓');
                 }
                 latest_seen_pk = json.latest_seen_pk;
             }
@@ -28,3 +28,10 @@ function get_updates() {
 }
 
 get_updates();
+
+
+$(window).on('visibilitychange', function(event) {
+    var data = new FormData();
+    data.append('csrfmiddlewaretoken', csrf_token);
+    navigator.sendBeacon(full_path, data);
+});

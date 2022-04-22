@@ -17,6 +17,7 @@ class Chat(models.Model):
     lat = models.DateTimeField("latest activity time", default=timezone.now)
 
     def update_lat(self):
+        """Set latest activity time of the chat to now."""
         self.lat = timezone.now()
         self.save()
 
@@ -32,7 +33,7 @@ class Join(models.Model):
                              on_delete=models.CASCADE,
                              related_name="joins")
     date_joined = models.DateField(auto_now_add=True)
-    unread_count = models.IntegerField(default=0)
+    last_active = models.DateTimeField(default=timezone.now)
 
     class Meta:
         constraints = [
@@ -42,14 +43,26 @@ class Join(models.Model):
             )
         ]
 
+    @property
+    def title(self):
+        """Return a title for the chat's entry."""
+        return self.get_receivers().get().profile.get_full_name()
+
+    @property
+    def unread_count(self):
+        """Return number of messages that has been sent since 
+        the last time user was in the chat.
+        """
+        return self.chat.messages.filter(send_time__gt=self.last_active).count()
+
     def get_receivers(self):
         """Return all other users that are in the same chat."""
         return self.chat.participants.exclude(pk=self.user.pk)
 
-    @property
-    def title(self):
-        """Return a title for the chat's entry"""
-        return self.get_receivers().get().profile.get_full_name()
+    def update_last_active(self):
+        """Set the last time user was in this chat to now."""
+        self.last_active = timezone.now()
+        self.save()
 
 
 class Message(models.Model):

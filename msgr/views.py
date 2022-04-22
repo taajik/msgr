@@ -45,8 +45,10 @@ class ProfilePageView(DetailView):
         if not chat:
             chat = Chat.objects.create()
             chat.participants.set([request.user, other])
+        else:
+            chat = chat.get()
 
-        return HttpResponseRedirect(reverse("msgr:main"))
+        return HttpResponseRedirect(reverse("msgr:chat", args=[chat.pk]))
 
 
 class ChatView(UserPassesTestMixin, TemplateView):
@@ -78,20 +80,27 @@ class ChatView(UserPassesTestMixin, TemplateView):
             return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        """POST means a new message is sent; so process the from."""
-        form = self.get_form({"data": request.POST})
-        if form.is_valid():
-            message = form.save(commit=False)
-            message.chat = self.chat
-            message.sender = request.user
-            message.save()
-            # A new message is sent in the chat, so:
-            self.chat.update_lat()
-            return HttpResponse(status=204)
+        if request.POST.get("content"):
+            # If it's a new message from, create the message.
+            form = self.get_form({"data": request.POST})
+            if form.is_valid():
+                message = form.save(commit=False)
+                message.chat = self.chat
+                message.sender = request.user
+                message.save()
+                # A new activity has happened in the chat, so:
+                self.chat.update_lat()
+                return HttpResponse(status=204)
+            else:
+                return HttpResponse("message wasn't sent",
+                                    content_type="text/plain",
+                                    status=400)
         else:
-            return HttpResponse("message wasn't sent",
-                                content_type="text/plain",
-                                status=400)
+            # Otherwise if a post request is sent
+            # without any parameters (except the csrf token),
+            # it means that the user has exited the chat page.
+            request.user.joins.get(chat=self.chat).update_last_active()
+            return HttpResponse(status=204)
 
     def get_updates(self, latest_pk=0, latest_seen_pk=0):
         """Get updates according to provided arguments.

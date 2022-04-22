@@ -10,6 +10,7 @@
 {% for join in join_list %}
     <li>
         <a href="{% url 'msgr:chat' join.chat.pk %}">{{ join.title }}</a>
+        ({{ join.unread_count }})
     </li>
 {% empty %}
     <li>You don't have any chats</li>
