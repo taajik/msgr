@@ -2,6 +2,8 @@
 from functools import cached_property
 
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.db.models import Q, Value
+from django.db.models.functions import Concat
 from django.http import HttpResponseRedirect
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
@@ -13,18 +15,51 @@ from django.views.generic import (
     ListView,
 )
 
-from .forms import MessageForm
+from .forms import SearchForm, MessageForm
 from .models import Chat
 from accounts.models import Profile
 
 
-class ChatsListView(ListView):
+class SearchFormMixin:
+    """Include the form context data for search_form.html inclusion."""
+
+    def get_form(self):
+        kwargs = {}
+        if self.request.GET:
+            kwargs = {"data": self.request.GET}
+        return SearchForm(**kwargs)
+
+    def get_context_data(self, **kwargs):
+        kwargs["search_form"] = self.get_form()
+        return super().get_context_data(**kwargs)
+
+
+class ChatsListView(SearchFormMixin, ListView):
     """Main page list of a user's chat entries."""
 
     template_name = "msgr/chats_list.html"
 
     def get_queryset(self):
         return self.request.user.joins.order_by("-chat__lat")
+
+
+class SearchView(SearchFormMixin, ListView):
+    """Result page of searching for users."""
+
+    template_name = "msgr/search_page.html"
+
+    def get_queryset(self):
+        query = self.request.GET.get("q")
+        if query:
+            # Search in full name or id
+            queryset = Profile.objects.annotate(
+                full_name=Concat("first_name", Value(" "), "last_name")
+            )
+            return queryset.filter(
+                Q(full_name__icontains=query) | Q(identifier__icontains=query)
+            )
+        else:
+            return Profile.objects.none()
 
 
 class ProfilePageView(DetailView):
@@ -36,16 +71,16 @@ class ProfilePageView(DetailView):
         return get_object_or_404(Profile, pk=self.kwargs["pk"])
 
     def post(self, request, *args, **kwargs):
-        """Create a private chat between the logged-in user and this use
-        if one doesn't already exists."""
-
         other = self.get_object().user
         chat = Chat.objects.filter(participants=request.user)
         chat = chat.filter(participants=other)
         if not chat:
+            # Create a private chat between
+            # the logged-in user and the other user.
             chat = Chat.objects.create()
             chat.participants.set([request.user, other])
         else:
+            # Or if a chat already exists, use that one to redirect to.
             chat = chat.get()
 
         return HttpResponseRedirect(reverse("msgr:chat", args=[chat.pk]))

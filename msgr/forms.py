@@ -4,6 +4,10 @@ from django import forms
 from .models import Message
 
 
+class SearchForm(forms.Form):
+    q = forms.CharField(strip=True, min_length=4)
+
+
 class MessageForm(forms.ModelForm):
     class Meta:
         model = Message

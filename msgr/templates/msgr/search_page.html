@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}search - msgr{% endblock %}
+
+{% block content %}
+
+<h2>Search for users</h2>
+
+{% include 'msgr/search_form.html' %}
+
+<ul>
+{% for user in profile_list %}
+    <li>
+        <a href="{% url 'msgr:profile' user.pk %}">{{ user.get_full_name }}</a>
+    </li>
+{% endfor %}
+</ul>
+
+<br>
+Go back to
+<a href="{% url 'msgr:main' %}">chats page</a>
+
+{% endblock %}
