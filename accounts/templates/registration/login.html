@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block title %}login - msgr{% endblock %}
 
@@ -8,10 +8,10 @@
 
 {% if next %}
     {% if user.is_authenticated %}
-    <p>Your account doesn't have access to this page. To proceed,
-    please login with an account that has access.</p>
+        <p>Your account doesn't have access to this page. To proceed,
+        please login with an account that has access.</p>
     {% else %}
-    <p>Please log in to see this page.</p>
+        <p>Please log in to see this page.</p>
     {% endif %}
 {% endif %}
 

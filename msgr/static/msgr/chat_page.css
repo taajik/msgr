@@ -3,21 +3,11 @@ body {
     margin: 0;
 }
 
-@media screen and (min-width: 800px) {
-    .content {
-        width: 30%;
-    }
-    #message-form {
-        width: 30% !important;
-    }
-}
-
 .content {
     margin: 0 auto 0;
     overflow: auto;
     min-height: 100vh;
     background-color: #2e1503;
-    border: 5px solid #2e1503;
 }
 
 .text {
@@ -25,7 +15,7 @@ body {
 }
 
 #message-form {
-    margin: 0 auto 0;
+    margin: 0 10px 0;
     position: fixed;
     bottom: 0;
     width: 100vw;
@@ -33,7 +23,7 @@ body {
 
 #message-field {
     width: 75%;
-    padding: 8px 8px;
+    padding: 8px;
     border-radius: 10px;
 }
 
@@ -41,14 +31,14 @@ body {
     display: inline-block;
     vertical-align: top;
     width: 15%;
-    padding: 8px 8px;
+    padding: 8px;
     border-radius: 10px;
 }
 
 div.message {
     display: block;
     clear: both;
-    margin: 5px 0;
+    margin: 5px;
     border-radius: 5px;
     padding: 10px;
 }
@@ -75,4 +65,13 @@ div.detail {
 
 .whitespace {
     float: left;
+}
+
+@media screen and (min-width: 800px) {
+    .content {
+        width: 30%;
+    }
+    #message-form {
+        width: 30%;
+    }
 }

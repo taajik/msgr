@@ -1,6 +1,4 @@
-{% extends "base.html" %}
-
-{% block title %}msgr{% endblock %}
+{% extends 'base.html' %}
 
 {% block content %}
 
@@ -12,7 +10,9 @@
 {% for join in join_list %}
     <li>
         <a href="{% url 'msgr:chat' join.chat.pk %}">{{ join.title }}</a>
-        ({{ join.unread_count }})
+        {% if join.unread_count %}
+            ({{ join.unread_count }})
+        {% endif %}
     </li>
 {% empty %}
     <li>You don't have any chats</li>

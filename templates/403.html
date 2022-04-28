@@ -1,11 +1,13 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+
+{% block title %}403 - msgr{% endblock %}
 
 {% block content %}
 
 <h2>403 Forbidden</h2>
 
 {% if exception %}
-  <p>{{ exception }}</p>
+    <p>{{ exception }}</p>
 {% endif %}
 
 {% endblock %}

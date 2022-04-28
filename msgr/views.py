@@ -2,7 +2,7 @@
 from functools import cached_property
 
 from django.contrib.auth.mixins import UserPassesTestMixin
-from django.db.models import Q, Value
+from django.db.models import Q, Count, CharField, Value as V
 from django.db.models.functions import Concat
 from django.http import HttpResponseRedirect
 from django.http.response import HttpResponse, JsonResponse
@@ -23,14 +23,14 @@ from accounts.models import Profile
 class SearchFormMixin:
     """Include the form context data for search_form.html inclusion."""
 
-    def get_form(self):
+    def get_search_form(self):
         kwargs = {}
         if self.request.GET:
             kwargs = {"data": self.request.GET}
         return SearchForm(**kwargs)
 
     def get_context_data(self, **kwargs):
-        kwargs["search_form"] = self.get_form()
+        kwargs["search_form"] = self.get_search_form()
         return super().get_context_data(**kwargs)
 
 
@@ -53,7 +53,10 @@ class SearchView(SearchFormMixin, ListView):
         if query:
             # Search in full name or id
             queryset = Profile.objects.annotate(
-                full_name=Concat("first_name", Value(" "), "last_name")
+                full_name=Concat(
+                    "first_name", V(" "), "last_name",
+                    output_field=CharField()
+                )
             )
             return queryset.filter(
                 Q(full_name__icontains=query) | Q(identifier__icontains=query)
@@ -71,17 +74,27 @@ class ProfilePageView(DetailView):
         return get_object_or_404(Profile, pk=self.kwargs["pk"])
 
     def post(self, request, *args, **kwargs):
+        # Get all chats in which the logged-in user participates.
+        chats = Chat.objects.annotate(Count("participants", distinct=True))
+        chats = chats.filter(participants=request.user)
         other = self.get_object().user
-        chat = Chat.objects.filter(participants=request.user)
-        chat = chat.filter(participants=other)
-        if not chat:
-            # Create a private chat between
+        if request.user == other:
+            # If this is the user's own profile,
+            # find the "saved messages" chat.
+            chats = chats.filter(participants__count=1)
+        else:
+            # Otherwise find the chat between
+            # the two users, if there is one.
+            chats = chats.filter(participants=other)
+
+        if chats:
+            # If a chat already exists, use that one to redirect to.
+            chat = chats.get()
+        else:
+            # Otherwise create a private chat between
             # the logged-in user and the other user.
             chat = Chat.objects.create()
             chat.participants.set([request.user, other])
-        else:
-            # Or if a chat already exists, use that one to redirect to.
-            chat = chat.get()
 
         return HttpResponseRedirect(reverse("msgr:chat", args=[chat.pk]))
 

@@ -46,11 +46,15 @@ class Join(models.Model):
     @property
     def title(self):
         """Return a title for the chat's entry."""
-        return self.get_receivers().get().profile.get_full_name()
+        other = self.get_receivers()
+        if other:
+            return other.get().profile.get_full_name()
+        else:
+            return "Saved Messages"
 
     @property
     def unread_count(self):
-        """Return number of messages that has been sent since 
+        """Return number of messages that has been sent since
         the last time user was in the chat.
         """
         return self.chat.messages.filter(send_time__gt=self.last_active).count()
@@ -85,5 +89,8 @@ class Message(models.Model):
         ordering = ["send_time"]
 
     def __str__(self) -> str:
-        return "chat (%s) message by %s" % (self.chat.pk,
-                                            self.sender.get_username())
+        return "message (%s) by %s in chat (%s)" % (
+            self.pk,
+            self.sender.get_username(),
+            self.chat.pk
+        )
