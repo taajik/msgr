@@ -52,16 +52,18 @@ class Join(models.Model):
         else:
             return "Saved Messages"
 
-    @property
-    def unread_count(self):
-        """Return number of messages that has been sent since
-        the last time user was in the chat.
-        """
-        return self.chat.messages.filter(send_time__gt=self.last_active).count()
-
     def get_receivers(self):
         """Return all other users that are in the same chat."""
         return self.chat.participants.exclude(pk=self.user.pk)
+
+    def get_unread_count(self):
+        """Return number of messages that has been sent since
+        the last time user was in the chat.
+        """
+        unread_messages = self.chat.messages.filter(
+            send_time__gt=self.last_active
+        )
+        return unread_messages.count()
 
     def update_last_active(self):
         """Set the last time user was in this chat to now."""
