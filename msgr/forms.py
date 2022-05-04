@@ -9,6 +9,7 @@ class SearchForm(forms.Form):
 
 
 class MessageForm(forms.ModelForm):
+
     class Meta:
         model = Message
         fields = (

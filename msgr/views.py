@@ -8,7 +8,7 @@ from django.http import HttpResponseRedirect
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse
 from django.views.generic import (
     TemplateView,
     DetailView,
@@ -74,10 +74,12 @@ class ProfilePageView(DetailView):
         return get_object_or_404(Profile, pk=self.kwargs["pk"])
 
     def post(self, request, *args, **kwargs):
+        """Start and enter a chat between two users."""
         # Get all chats in which the logged-in user participates.
         chats = Chat.objects.annotate(Count("participants", distinct=True))
         chats = chats.filter(participants=request.user)
         other = self.get_object().user
+
         if request.user == other:
             # If this is the user's own profile,
             # find the "saved messages" chat.
@@ -116,6 +118,7 @@ class ChatView(UserPassesTestMixin, TemplateView):
         return self.chat.participants.filter(pk=self.request.user.pk).exists()
 
     def get(self, request, *args, **kwargs):
+        """Render a chat page and send updates to it."""
         if request.GET:
             # If there are GET parameters, use them to
             # return updates about this chat.
@@ -128,6 +131,7 @@ class ChatView(UserPassesTestMixin, TemplateView):
             return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+        """Save a new message and record user's activity."""
         if request.POST.get("content"):
             # If it's a new message from, create the message.
             form = self.get_form({"data": request.POST})

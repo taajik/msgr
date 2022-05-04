@@ -86,5 +86,15 @@ class Profile(models.Model):
         """Return the short name for the user."""
         return self.first_name
 
+    def clean(self):
+        qs = Profile.objects.exclude(pk=self.pk).filter(
+            identifier__iexact=self.identifier
+        )
+        if qs.exists():
+            raise ValidationError({
+                "identifier": "User with this Id already exists.",
+            })
+        super().clean()
+
     def __str__(self) -> str:
         return "%s profile" % self.user.get_username()
