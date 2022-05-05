@@ -2,10 +2,10 @@
 
 {% for m in message_list %}
 {% if m.sender == user %}
-    <div class="message right">
+<div class="message right">
 {% else %}
-    <div class="message left">
-        <b>{{ m.sender.profile.get_short_name }}</b>:
+<div class="message left">
+    <b>{{ m.sender.profile.get_short_name }}</b>:
 {% endif %}
     <pre>{{ m.content|inline_id }}</pre>
     <div class="detail">

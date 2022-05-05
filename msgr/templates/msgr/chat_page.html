@@ -8,11 +8,10 @@
 {% block title %}chat - msgr{% endblock %}
 
 {% block style %}
-<link type="text/css" rel="stylesheet" href="{% static 'msgr/chat_page.css' %}"/>
+<link type="text/css" rel="stylesheet" href="{% static 'msgr/css/chat_page.css' %}"/>
 {% endblock %}
 
 {% block content %}
-<div class="content">
 
 <h2 class="text">Chat room number {{ pk }}</h2>
 
@@ -33,7 +32,6 @@
 
 </pre>
 
-</div>
 {% endblock content %}
 
 {% block javascript %}
@@ -41,6 +39,6 @@
     var full_path = "{{ request.get_full_path }}";
     var csrf_token = "{{ csrf_token }}";
 </script>
-<script src="{% static 'msgr/get-updates-jquery.js' %}"></script>
-<script src="{% static 'msgr/send-message-jquery.js' %}"></script>
+<script src="{% static 'msgr/js/get-updates-jquery.js' %}"></script>
+<script src="{% static 'msgr/js/send-message-jquery.js' %}"></script>
 {% endblock %}

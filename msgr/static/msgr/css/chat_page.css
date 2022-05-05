@@ -1,16 +1,15 @@
 
-body {
-    margin: 0;
-}
-
-.content {
-    margin: 0 auto 0;
+#content {
     overflow: auto;
+    padding: 0px;
     min-height: 100vh;
+    font-size: medium;
+    word-wrap: break-word;
     background-color: #2e1503;
 }
 
 .text {
+    text-align: center;
     color: whitesmoke;
 }
 
@@ -60,17 +59,14 @@ pre {
 div.detail {
     float: right;
     margin-left: 10px;
-    font-family: 'Courier New', monospace;
+    font-family: "Courier New", monospace;
 }
 
 .whitespace {
     float: left;
 }
 
-@media screen and (min-width: 800px) {
-    .content {
-        width: 30%;
-    }
+@media screen and (min-width: 1200px) {
     #message-form {
         width: 30%;
     }
