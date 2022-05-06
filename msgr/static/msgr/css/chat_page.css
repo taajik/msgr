@@ -8,8 +8,7 @@
     background-color: #2e1503;
 }
 
-.text {
-    text-align: center;
+h1 {
     color: whitesmoke;
 }
 
@@ -32,6 +31,8 @@
     width: 15%;
     padding: 8px;
     border-radius: 10px;
+    border-color: #9a7b4f;
+    background-color: #9a7b4f;
 }
 
 div.message {
