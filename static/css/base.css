@@ -33,7 +33,9 @@ a:hover {
 }
 
 input {
+    padding: 2px;
     border-radius: 5px;
+    border-color: #9a7b4f;
     background-color: #e3dac9;
 }
 

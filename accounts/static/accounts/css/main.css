@@ -1,0 +1,15 @@
+
+#content {
+    text-align: center;
+}
+
+div.form-field {
+    margin-top: 5px;
+    font-size: medium;
+}
+
+@media screen and (min-width: 1200px) {
+    #content {
+        padding-top: 50%;
+    }
+}

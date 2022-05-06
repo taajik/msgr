@@ -1,16 +1,26 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block style %}
+<link type="text/css" rel="stylesheet" href="{% static 'accounts/css/main.css' %}"/>
+{% endblock %}
 
 {% block title %}profile - msgr{% endblock %}
 
 {% block content %}
 
-<h2>Profile</h2>
+<h1>Profile</h1>
 
 <form method="post" action="{% url 'profile' %}">
+    {{ form.non_field_errors }}
     {% csrf_token %}
-    <table>
-        {{ form.as_table }}
-    </table>
+    {% for field in form %}
+    <div class="form-field">
+        {{ field.errors }}
+        {{ field.label_tag }}<br>
+        {{ field }}
+    </div>
+    {% endfor %}
 
     <br>
     <input type="submit" value="Save">

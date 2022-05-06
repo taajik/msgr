@@ -55,6 +55,7 @@ div.left {
 
 pre {
     display: inline;
+    white-space: pre-wrap;
 }
 
 div.detail {
