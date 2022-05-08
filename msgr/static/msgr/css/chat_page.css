@@ -1,8 +1,8 @@
 
 #content {
     overflow: auto;
-    padding: 0px;
     min-height: 100vh;
+    padding: 0px;
     font-size: medium;
     word-wrap: break-word;
     background-color: #2e1503;
@@ -13,9 +13,9 @@ h1 {
 }
 
 #message-form {
-    margin: 0 10px 0;
     position: fixed;
     bottom: 0;
+    margin: 0 10px 0;
     width: 100vw;
 }
 
@@ -36,11 +36,11 @@ h1 {
 }
 
 div.message {
-    display: block;
     clear: both;
+    display: block;
     margin: 5px;
-    border-radius: 5px;
     padding: 10px;
+    border-radius: 5px;
 }
 
 div.right {

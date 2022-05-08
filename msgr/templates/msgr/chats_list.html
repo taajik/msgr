@@ -1,4 +1,10 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block style %}
+<link type="text/css" rel="stylesheet" href="{% static 'msgr/css/chats_list.css' %}"/>
+<link type="text/css" rel="stylesheet" href="{% static 'msgr/css/search_form.css' %}"/>
+{% endblock %}
 
 {% block title %}chats - msgr{% endblock %}
 
@@ -8,19 +14,27 @@
 
 {% include 'msgr/search_form.html' %}
 
-<ul>
 {% for join in join_list %}
-    <li>
+<div class="chat">
+    <div class="chat-title">
         <a href="{% url 'msgr:chat' join.chat.pk %}">{{ join.title }}</a>
-        {% with unread_count=join.get_unread_count %}
-            {% if unread_count %}
-                ({{ unread_count }})
-            {% endif %}
-        {% endwith %}
-    </li>
+    </div>
+    {% with unread_count=join.get_unread_count %}
+    {% if unread_count %}
+    <div class="unread-count">
+        {{ unread_count }}
+    </div>
+    {% endif %}
+    {% endwith %}
+    <div class="chat-date">
+        {{ join.chat.lat|date:"H:i m/d" }}
+    </div>
+</div>
 {% empty %}
-    <li>You don't have any chats</li>
+<div class="chat">
+    You don't have any chats.
+</div>
 {% endfor %}
-</ul>
+<hr/>
 
 {% endblock %}

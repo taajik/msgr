@@ -1,0 +1,43 @@
+
+div.chat {
+    padding: 12px 8%;
+    border-radius: 5px;
+}
+
+div.chat:hover {
+    background-color: #856a44;
+}
+
+div.chat-title {
+    display: inline;
+}
+
+div.chat-title a {
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 60%;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+div.unread-count {
+    display: inline;
+    margin: 0 1%;
+    padding: 1px 5px;
+    border: 1px solid black;
+    border-radius: 50%;
+    font-size: medium;
+    color: white;
+    background-color: #410200;
+}
+
+div.chat-date {
+    float: right;
+    padding: 4px;
+    font-size: small;
+}
+
+hr {
+    width: 80%;
+}

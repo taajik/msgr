@@ -41,10 +41,16 @@ input {
 
 input[type=button], input[type=submit], input[type=reset] {
     padding: 1px 8px;
+    border-color: #2e1503;
     cursor: pointer;
     color: white;
-    border-color: #2e1503;
     background-color: #2e1503;
+}
+
+hr {
+    border: none;
+    height: 1px;
+    background-color: #410200;
 }
 
 @media screen and (min-width: 1200px) {
