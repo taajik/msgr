@@ -18,4 +18,4 @@ function send_message(form) {
             console.log('Error: ' + data.responseText);
         }
     });
-};
+}

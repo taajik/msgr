@@ -28,10 +28,3 @@ function get_updates() {
 }
 
 get_updates();
-
-
-$(window).on('visibilitychange', function(event) {
-    var data = new FormData();
-    data.append('csrfmiddlewaretoken', csrf_token);
-    navigator.sendBeacon(full_path, data);
-});

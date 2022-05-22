@@ -2,13 +2,13 @@
 
 {% for m in message_list %}
 {% if m.sender == user %}
-<div class="message right">
+<div onclick="open_modal('{{ m.pk }}')" id="m-{{ m.pk }}" class="message right">
 {% else %}
-<div class="message left">
+<div id="m-{{ m.pk }}" class="message left">
     <b>{{ m.sender.profile.get_short_name }}</b>:
 {% endif %}
     <pre>{{ m.content|inline_id }}</pre>
-    <div class="detail">
+    <span class="detail">
         <sub>{{ m.send_time|time:"H:i" }}</sub>
         {% if m.sender == user %}
             <sub id="tick-{{ m.pk }}">
@@ -19,6 +19,6 @@
             {% endif %}
             </sub>
         {% endif %}
-    </div>
+    </span>
 </div>
 {% endfor %}

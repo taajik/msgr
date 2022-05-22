@@ -10,13 +10,14 @@ from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views.generic import (
+    View,
     TemplateView,
     DetailView,
     ListView,
 )
 
 from .forms import SearchForm, MessageForm
-from .models import Chat
+from .models import Chat, Message
 from accounts.models import Profile
 
 
@@ -51,7 +52,7 @@ class SearchView(SearchFormMixin, ListView):
     def get_queryset(self):
         query = self.request.GET.get("q")
         if query:
-            # Search in full name or id
+            # Search in full name or id.
             queryset = Profile.objects.annotate(
                 full_name=Concat(
                     "first_name", V(" "), "last_name",
@@ -227,3 +228,14 @@ class ChatView(UserPassesTestMixin, TemplateView):
         if "form" not in kwargs:
             kwargs["form"] = self.get_form()
         return super().get_context_data(**kwargs)
+
+
+class ChatDeleteMessageView(View):
+    """Delete a user's message with no response."""
+
+    def post(self, request, *args, **kwargs):
+        message = get_object_or_404(Message, pk=request.POST.get("message"))
+        # A user can only delete their own message.
+        if request.user == message.sender:
+            message.delete()
+        return HttpResponse(status=204)

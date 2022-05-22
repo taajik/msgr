@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block style %}
-<link type="text/css" rel="stylesheet" href="{% static 'msgr/css/chat_page.css' %}"/>
+<link rel="stylesheet" href="{% static 'msgr/css/chat_page.css' %}">
 {% endblock %}
 
 {% block title %}chat - msgr{% endblock %}
@@ -15,10 +15,26 @@
 
 <h1>Chat room number {{ pk }}</h1>
 
+<div id="delete-confirm" class="modal">
+    <div class="modal-content">
+        Delete this message?
+        <button onclick="close_modal()">
+            Cancel
+        </button>
+        <form id="delete-form">
+            {% csrf_token %}
+            <input type="hidden" name="message" id="delete-pk">
+            <button type="submit" onclick="close_modal()">
+                Delete
+            </button>
+        </form>
+    </div>
+</div>
+
 <div id="messages-list">
 </div>
 
-<form method="post" action="{{ request.get_full_path }}" id="message-form">
+<form id="message-form">
     {% csrf_token %}
     {{ form.content }}
     <input type="submit" value="Send" id="message-button">
@@ -37,8 +53,10 @@
 {% block javascript %}
 <script>
     var full_path = "{{ request.get_full_path }}";
+    var delete_message_path = "{% url 'msgr:delete_message' %}";
     var csrf_token = "{{ csrf_token }}";
 </script>
-<script src="{% static 'msgr/js/get-updates-jquery.js' %}"></script>
-<script src="{% static 'msgr/js/send-message-jquery.js' %}"></script>
+<script src="{% static 'msgr/js/chatpage.js' %}"></script>
+<script src="{% static 'msgr/js/chatpage-get-updates.js' %}"></script>
+<script src="{% static 'msgr/js/chatpage-send-message.js' %}"></script>
 {% endblock %}
