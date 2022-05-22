@@ -58,10 +58,36 @@ pre {
     white-space: pre-wrap;
 }
 
-div.detail {
+span.detail {
     float: right;
     margin-left: 10px;
     font-family: "Courier New", monospace;
+}
+
+div.modal {
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    display: none;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+div.modal-content {
+    margin: 15vh auto;
+    width: fit-content;
+    padding: 15px 20px 40px;
+    text-align: center;
+    border-radius: 5px;
+    background-color: #9a7b4f;
+}
+
+div.modal-content button {
+    float: left;
+    margin: 5px 2.5%;
+    width: 45%;
 }
 
 .whitespace {

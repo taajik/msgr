@@ -8,7 +8,7 @@ body {
 }
 
 #container {
-    margin: 0 auto 0;
+    margin: 0 auto;
     min-height: 100vh;
     background-color: #9a7b4f;
 }
@@ -33,14 +33,15 @@ a:hover {
 }
 
 input {
-    padding: 2px;
-    border-radius: 5px;
+    padding: 2px 5px;
+    border-radius: 10px;
     border-color: #9a7b4f;
     background-color: #e3dac9;
 }
 
-input[type=button], input[type=submit], input[type=reset] {
+button, input[type=button], input[type=submit], input[type=reset] {
     padding: 1px 8px;
+    border-radius: 5px;
     border-color: #2e1503;
     cursor: pointer;
     color: white;

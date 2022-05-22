@@ -2,8 +2,8 @@
 {% load static %}
 
 {% block style %}
-<link type="text/css" rel="stylesheet" href="{% static 'msgr/css/chats_list.css' %}"/>
-<link type="text/css" rel="stylesheet" href="{% static 'msgr/css/search_form.css' %}"/>
+<link rel="stylesheet" href="{% static 'msgr/css/chats_list.css' %}">
+<link rel="stylesheet" href="{% static 'msgr/css/search_form.css' %}">
 {% endblock %}
 
 {% block title %}chats - msgr{% endblock %}
@@ -35,6 +35,6 @@
     You don't have any chats.
 </div>
 {% endfor %}
-<hr/>
+<hr>
 
 {% endblock %}
