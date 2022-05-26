@@ -4,7 +4,7 @@ var latest_seen_pk = 0;
 
 function get_updates() {
     $.ajax({
-        url: full_path,
+        url: updates_path,
         type: 'GET',
         data: {latest_pk: latest_pk, latest_seen_pk: latest_seen_pk},
 

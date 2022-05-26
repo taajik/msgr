@@ -13,7 +13,7 @@
 
 {% block content %}
 
-<h1>Chat room number {{ pk }}</h1>
+<h1>Chat room number {{ object.pk }}</h1>
 
 <div id="delete-confirm" class="modal">
     <div class="modal-content">
@@ -53,6 +53,7 @@
 {% block javascript %}
 <script>
     var full_path = "{{ request.get_full_path }}";
+    var updates_path = "{% url 'msgr:updates' object.pk %}";
     var delete_message_path = "{% url 'msgr:delete_message' %}";
     var csrf_token = "{{ csrf_token }}";
 </script>

@@ -1,17 +1,14 @@
 
-from functools import cached_property
-
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.db.models import Q, Count, CharField, Value as V
 from django.db.models.functions import Concat
-from django.http import HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views.generic import (
     View,
-    TemplateView,
     DetailView,
     ListView,
 )
@@ -102,47 +99,33 @@ class ProfilePageView(DetailView):
         return HttpResponseRedirect(reverse("msgr:chat", args=[chat.pk]))
 
 
-class ChatView(UserPassesTestMixin, TemplateView):
+class ChatView(UserPassesTestMixin, DetailView):
     """A chat page that contains messages."""
 
     template_name = "msgr/chat_page.html"
     permission_denied_message = "Sorry, you can't access this chat."
     raise_exception = True
 
-    @cached_property
-    def chat(self):
-        """The corresponding chat object."""
+    def get_object(self, queryset=None):
         return get_object_or_404(Chat, pk=self.kwargs["pk"])
 
     def test_func(self):
         """Only users that are in this chat can access this page."""
-        return self.chat.participants.filter(pk=self.request.user.pk).exists()
-
-    def get(self, request, *args, **kwargs):
-        """Render a chat page and send updates to it."""
-        if request.GET:
-            # If there are GET parameters, use them to
-            # return updates about this chat.
-            response = self.get_updates(request.GET.get("latest_pk"),
-                                        request.GET.get("latest_seen_pk"))
-            return JsonResponse(response)
-        else:
-            # Otherwise if the url is simply requested,
-            # return the rendered chat page.
-            return super().get(request, *args, **kwargs)
+        self.object = self.get_object()
+        return self.object.participants.filter(pk=self.request.user.pk).exists()
 
     def post(self, request, *args, **kwargs):
         """Save a new message and record user's activity."""
         if request.POST.get("content"):
-            # If it's a new message from, create the message.
+            # If it's a new message from submit, create the message.
             form = self.get_form({"data": request.POST})
             if form.is_valid():
                 message = form.save(commit=False)
-                message.chat = self.chat
+                message.chat = self.object
                 message.sender = request.user
                 message.save()
                 # A new activity has happened in the chat, so:
-                self.chat.update_lat()
+                self.object.update_lat()
                 return HttpResponse(status=204)
             else:
                 return HttpResponse("message wasn't sent",
@@ -152,10 +135,39 @@ class ChatView(UserPassesTestMixin, TemplateView):
             # Otherwise if a post request is sent
             # without any parameters (except the csrf token),
             # it means that the user has exited the chat page.
-            request.user.joins.get(chat=self.chat).update_last_active()
+            request.user.joins.get(chat=self.object).update_last_active()
             return HttpResponse(status=204)
 
-    def get_updates(self, latest_pk=0, latest_seen_pk=0):
+    def get_form(self, kwargs=None):
+        if kwargs is None:
+            kwargs = {}
+        return MessageForm(**kwargs)
+
+    def get_context_data(self, **kwargs):
+        if "form" not in kwargs:
+            kwargs["form"] = self.get_form()
+        return super().get_context_data(**kwargs)
+
+
+class ChatUpdatesView(UserPassesTestMixin, View):
+    """Return updates about a chat."""
+
+    def get_chat(self):
+        return get_object_or_404(Chat, pk=self.kwargs["pk"])
+
+    def test_func(self):
+        self.chat = self.get_chat()
+        return self.chat.participants.filter(pk=self.request.user.pk).exists()
+
+    def get(self, request, *args, **kwargs):
+        if request.GET:
+            response = self.get_updates(request.GET.get("latest_pk"),
+                                        request.GET.get("latest_seen_pk"))
+            return JsonResponse(response)
+        else:
+            raise Http404
+
+    def get_updates(self, latest_pk, latest_seen_pk):
         """Get updates according to provided arguments.
 
         latest_pk is the most recent message that one has got. and
@@ -184,6 +196,8 @@ class ChatView(UserPassesTestMixin, TemplateView):
         primary key of the last one (updated latest_pk).
         """
 
+        if latest_pk is None:
+            latest_pk = 0
         new_messages = self.chat.messages.filter(pk__gt=latest_pk)
         new_messages_rendered = ""
         latest_pk = 0
@@ -208,6 +222,8 @@ class ChatView(UserPassesTestMixin, TemplateView):
         primary key of the last one (updated latest_seen_pk).
         """
 
+        if latest_seen_pk is None:
+            latest_seen_pk = 0
         seen_messages = self.chat.messages.filter(pk__gt=latest_seen_pk,
                                                   sender=self.request.user,
                                                   is_seen=True)
@@ -217,17 +233,6 @@ class ChatView(UserPassesTestMixin, TemplateView):
             seen_messages_pk = [m.pk for m in seen_messages]
             latest_seen_pk = seen_messages_pk[-1]
         return seen_messages_pk, latest_seen_pk
-
-    def get_form(self, kwargs=None):
-        if kwargs is None:
-            kwargs = {}
-        return MessageForm(**kwargs)
-
-    def get_context_data(self, **kwargs):
-        kwargs["chat"] = self.chat
-        if "form" not in kwargs:
-            kwargs["form"] = self.get_form()
-        return super().get_context_data(**kwargs)
 
 
 class ChatDeleteMessageView(View):
