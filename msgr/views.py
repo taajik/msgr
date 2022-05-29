@@ -2,16 +2,21 @@
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.db.models import Q, Count, CharField, Value as V
 from django.db.models.functions import Concat
-from django.http import Http404, HttpResponseRedirect
-from django.http.response import HttpResponse, JsonResponse
+from django.http import (
+    Http404,
+    HttpResponse,
+    HttpResponseRedirect,
+    JsonResponse,
+)
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views.generic import (
-    View,
     DetailView,
     ListView,
+    View,
 )
+from django.views.generic.list import MultipleObjectMixin
 
 from .forms import SearchForm, MessageForm
 from .models import Chat, Message
@@ -149,8 +154,54 @@ class ChatView(UserPassesTestMixin, DetailView):
         return super().get_context_data(**kwargs)
 
 
+class ChatMessagesView(UserPassesTestMixin, MultipleObjectMixin, View):
+    """Paginate messages and return rendered result in json."""
+
+    paginate_by = 20
+
+    def get_chat(self):
+        return get_object_or_404(Chat, pk=self.kwargs["pk"])
+
+    def test_func(self):
+        self.chat = self.get_chat()
+        return self.chat.participants.filter(pk=self.request.user.pk).exists()
+
+    def get_queryset(self):
+        return self.chat.messages.reverse()
+
+    def get(self, request, *args, **kwargs):
+        # The full queryset:
+        self.object_list = self.get_queryset()
+        try:
+            context = self.get_context_data()
+        except Http404:
+            # A 404 error breaks the chat; so instead send an empty response.
+            return JsonResponse({"messages_rendered": ""})
+        context["user"] = request.user
+        messages_rendered = render_to_string(
+            "msgr/messages_list.html",
+            context=context,
+        )
+
+        # This page of the queryset:
+        object_list = context["object_list"]
+        # Include the primary key of the first item
+        # on the page in json response.
+        first_item_pk = "0"
+        if object_list.exists():
+            first_item_pk = object_list.first().pk
+            # Fetching this page means its messages are seen:
+            self.object_list.filter(pk__in=object_list).exclude(
+                sender=request.user
+            ).update(is_seen=True)
+        return JsonResponse({
+            "messages_rendered": messages_rendered,
+            "first_item_pk": first_item_pk,
+        })
+
+
 class ChatUpdatesView(UserPassesTestMixin, View):
-    """Return updates about a chat."""
+    """Return updates about a chat in json."""
 
     def get_chat(self):
         return get_object_or_404(Chat, pk=self.kwargs["pk"])
@@ -196,11 +247,11 @@ class ChatUpdatesView(UserPassesTestMixin, View):
         primary key of the last one (updated latest_pk).
         """
 
-        if latest_pk is None:
-            latest_pk = 0
+        if not latest_pk:
+            latest_pk = "0"
         new_messages = self.chat.messages.filter(pk__gt=latest_pk)
         new_messages_rendered = ""
-        latest_pk = 0
+
         if new_messages.exists():
             # Fetching these messages means they are seen:
             new_messages.exclude(sender=self.request.user).update(is_seen=True)
@@ -222,13 +273,13 @@ class ChatUpdatesView(UserPassesTestMixin, View):
         primary key of the last one (updated latest_seen_pk).
         """
 
-        if latest_seen_pk is None:
-            latest_seen_pk = 0
+        if not latest_seen_pk:
+            latest_seen_pk = "0"
         seen_messages = self.chat.messages.filter(pk__gt=latest_seen_pk,
                                                   sender=self.request.user,
                                                   is_seen=True)
         seen_messages_pk = []
-        latest_seen_pk = 0
+
         if seen_messages.exists():
             seen_messages_pk = [m.pk for m in seen_messages]
             latest_seen_pk = seen_messages_pk[-1]

@@ -53,11 +53,13 @@
 {% block javascript %}
 <script>
     var full_path = "{{ request.get_full_path }}";
+    var messages_path = "{% url 'msgr:messages' object.pk %}";
     var updates_path = "{% url 'msgr:updates' object.pk %}";
     var delete_message_path = "{% url 'msgr:delete_message' %}";
     var csrf_token = "{{ csrf_token }}";
 </script>
-<script src="{% static 'msgr/js/chatpage.js' %}"></script>
 <script src="{% static 'msgr/js/chatpage-get-updates.js' %}"></script>
+<script src="{% static 'msgr/js/chatpage.js' %}"></script>
 <script src="{% static 'msgr/js/chatpage-send-message.js' %}"></script>
+<script src="{% static 'msgr/js/chatpage-delete-message.js' %}"></script>
 {% endblock %}

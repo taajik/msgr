@@ -6,27 +6,29 @@ $(window).on('visibilitychange', function(event) {
 });
 
 
-var modal = document.getElementById('delete-confirm');
+var page = 1;
 
-function open_modal(message) {
-    $('#delete-pk').val(message);
-    modal.style.display = 'block';
+function load_messages() {
+    $.ajax({
+        url: messages_path,
+        type: 'GET',
+        data: {page: page},
+
+        success: function(json) {
+            $('#messages-list').append(json.messages_rendered);
+            if (page == 1) {
+                latest_pk = json.first_item_pk;
+                get_updates();
+            }
+        },
+    });
 }
 
-function close_modal() {
-    modal.style.display = 'none';
-}
+load_messages();
 
-$(window).click(function(event) {
-    if (event.target == modal) {
-        close_modal();
+$(window).scroll(function() {
+    if ($(window).scrollTop() >= ($(document).height() - $(window).outerHeight(true) - 1)) {
+        page += 1;
+        load_messages();
     }
-});
-
-
-$('#delete-form').submit(function(event) {
-    event.preventDefault();
-    var data = new FormData(this);
-    navigator.sendBeacon(delete_message_path, data);
-    $('#m-'+data.get('message')).remove();
 });
