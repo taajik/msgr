@@ -53,6 +53,10 @@ div.left {
     background-color: #bbbbbb;
 }
 
+.profile-link {
+    text-decoration: none;
+}
+
 pre {
     display: inline;
     white-space: pre-wrap;

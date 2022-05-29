@@ -1,19 +1,28 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'msgr/css/profile_page.css' %}">
+{% endblock %}
 
 {% block title %}{{ object.first_name }} - msgr{% endblock %}
 
 {% block content %}
 
-<p>
-    Name: {{ object.first_name }}
-    {% if object.last_name %}
+<h1>
+    {{ object.first_name }}
+{% if object.last_name %}
     {{ object.last_name }}
-    {% endif %}
-    <br>
-    {% if object.identifier %}
-    ID: @{{ object.identifier }}<br>
-    {% endif %}
-    Bio: {{ object.biography }}<br>
+{% endif %}
+</h1>
+
+<p>
+{% if object.identifier %}
+    @{{ object.identifier }}<br>
+{% endif %}
+{% if object.biography %}
+    {{ object.biography }}<br>
+{% endif %}
 </p>
 
 <form method="post" action="{{ request.get_full_path }}">
