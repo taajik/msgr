@@ -10,6 +10,7 @@ function get_updates() {
 
         success: function(json) {
             $('#messages-list').prepend(json.new_messages_rendered);
+            add_date_headers(json.new_messages_rendered);
             for (let pk of json.seen_messages_pk) {
                 $('#tick-'+pk).text('✓✓');
             }

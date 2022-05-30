@@ -16,6 +16,7 @@ function load_messages() {
 
         success: function(json) {
             $('#messages-list').append(json.messages_rendered);
+            add_date_headers(json.messages_rendered);
             if (page == 1) {
                 latest_pk = json.first_item_pk;
                 get_updates();

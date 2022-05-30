@@ -35,9 +35,18 @@ h1 {
     background-color: #9a7b4f;
 }
 
+div.date-header {
+    clear: both;
+    margin: 5px auto;
+    width: fit-content;
+    padding: 2px 5px;
+    border-radius: 20px;
+    font-size: small;
+    background-color: rgba(150, 150, 150, 0.8);
+}
+
 div.message {
     clear: both;
-    display: block;
     margin: 5px;
     padding: 10px;
     border-radius: 5px;
@@ -98,7 +107,7 @@ div.modal-content button {
     float: left;
 }
 
-@media screen and (min-width: 1200px) {
+@media screen and (min-width: 1000px) {
     #message-form {
         width: 30%;
     }

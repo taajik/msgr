@@ -58,6 +58,7 @@
     var delete_message_path = "{% url 'msgr:delete_message' %}";
     var csrf_token = "{{ csrf_token }}";
 </script>
+<script src="{% static 'msgr/js/chatpage-date-headers.js' %}"></script>
 <script src="{% static 'msgr/js/chatpage-get-updates.js' %}"></script>
 <script src="{% static 'msgr/js/chatpage.js' %}"></script>
 <script src="{% static 'msgr/js/chatpage-send-message.js' %}"></script>

@@ -8,7 +8,7 @@ div.form-field {
     font-size: medium;
 }
 
-@media screen and (min-width: 1200px) {
+@media screen and (min-width: 1000px) {
     #content {
         padding-top: 50%;
     }

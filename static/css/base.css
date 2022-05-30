@@ -54,7 +54,7 @@ hr {
     background-color: #410200;
 }
 
-@media screen and (min-width: 1200px) {
+@media screen and (min-width: 1000px) {
     #container {
         width: 30%;
     }
