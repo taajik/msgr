@@ -1,17 +1,19 @@
 
-var modal = document.getElementById('delete-confirm');
+var modal = $('#delete-confirm');
 
 function open_modal(message) {
     $('#delete-pk').val(message);
-    modal.style.display = 'block';
+    $('#m-'+message).css('background-color', '#618d3d');
+    modal.css('display', 'block');
 }
 
 function close_modal() {
-    modal.style.display = 'none';
+    $('#m-'+$('#delete-pk').val()).css('background-color', '');
+    modal.css('display', 'none');
 }
 
 $(window).click(function(event) {
-    if (event.target == modal) {
+    if ($(event.target).is(modal)) {
         close_modal();
     }
 });

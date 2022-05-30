@@ -10,9 +10,9 @@
     </a>
 {% endif %}
     <pre>{{ m.content|inline_id }}</pre>
-    <span hidden class="message-date">{{ m.send_time|date:"F d" }}</span>
+    <span hidden class="m-date">{{ m.send_time|date:"F d" }}</span>
     <span class="detail">
-        <sub class="message-time">{{ m.send_time|time:"H:i" }}</sub>
+        <sub class="m-time">{{ m.send_time|time:"H:i" }}</sub>
         {% if m.sender == user %}
             <sub id="tick-{{ m.pk }}">
             {% if m.is_seen %}

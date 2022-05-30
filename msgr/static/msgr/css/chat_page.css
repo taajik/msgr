@@ -37,8 +37,8 @@ h1 {
 
 div.date-header {
     clear: both;
+    display: table;
     margin: 5px auto;
-    width: fit-content;
     padding: 2px 5px;
     border-radius: 20px;
     font-size: small;
