@@ -1,0 +1,33 @@
+<div id="menu-btn">
+    <button onclick="open_menu()">
+        <i class="fa fa-bars"></i>
+    </button>
+</div>
+<div id="menu-wrapper">
+    <div id="menu">
+        {% if user.is_authenticated %}
+        <div id="logo">
+            <a href="{% url 'msgr:main' %}">MSGR</a>
+        </div>
+        <div class="menu-link">
+            <a href="{% url 'logout' %}">Log out</a>
+        </div>
+        <div class="menu-link">
+            <a href="{% url 'profile' %}">Profile</a>
+        </div>
+        <div class="menu-link">
+            <a href="{% url 'msgr:search' %}">Search</a>
+        </div>
+        {% else %}
+        <div id="logo">
+            <a href="{% url 'home' %}">MSGR</a>
+        </div>
+        <div class="menu-link">
+            <a href="{% url 'signup' %}">Sign up</a>
+        </div>
+        <div class="menu-link">
+            <a href="{% url 'login' %}">Log in</a>
+        </div>
+        {% endif %}
+    </div>
+</div>

@@ -1,15 +1,23 @@
 
-#content {
-    overflow: auto;
-    min-height: 100vh;
-    padding: 0px;
-    font-size: medium;
-    word-wrap: break-word;
+#container {
     background-color: #2e1503;
 }
 
-h1 {
+#content {
+    overflow: auto;
+    padding: 0px;
+    font-size: medium;
+    word-wrap: break-word;
+}
+
+#header {
     color: whitesmoke;
+    background-color: #2e1503;
+}
+
+#menu-btn button, #message-button {
+    border-color: #9a7b4f;
+    background-color: #9a7b4f;
 }
 
 #message-form {
@@ -31,8 +39,6 @@ h1 {
     width: 15%;
     padding: 8px;
     border-radius: 10px;
-    border-color: #9a7b4f;
-    background-color: #9a7b4f;
 }
 
 div.date-header {
