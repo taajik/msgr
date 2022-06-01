@@ -13,10 +13,11 @@ div.chat-title {
 }
 
 div.chat-title a {
+    display: inline-block;
     overflow: hidden;
-    text-overflow: ellipsis;
     max-width: 60%;
     white-space: nowrap;
+    text-overflow: ellipsis;
     text-decoration: none;
 }
 

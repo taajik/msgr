@@ -6,10 +6,9 @@
 {% endblock %}
 
 {% block title %}chat - msgr{% endblock %}
+{% block h1 %}<h1>Chat room number {{ object.pk }}</h1>{% endblock %}
 
 {% block content %}
-
-<h1>Chat room number {{ object.pk }}</h1>
 
 <div id="delete-confirm" class="modal">
     <div class="modal-content">
