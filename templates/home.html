@@ -1,23 +1,79 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
 
 {% block h1 %}<h1>msgr</h1>{% endblock %}
 
 {% block content %}
 
 {% if user.is_authenticated %}
-<p>
-    Welcome {{ user.get_username }}. Thanks for logging in.<br>
-    You can go to <a href="{% url 'profile' %}">your profile</a>
-    or <a href="{% url 'logout' %}">log out</a>.<br>
-    Or just jump straight to
-    <a href="{% url 'msgr:main' %}">the app</a>
-</p>
+<div class="blank"></div>
+<div class="message">
+    Hello {{ user.get_username }}
+</div>
+<div class="blank"></div>
+<div class="message">
+    Welcome to MSGR and thanks for logging in 💚💚
+</div>
+<div class="blank"></div>
+<div class="message">
+    <a href="{% url 'profile' %}">Click here</a> to edit your profile
+</div>
+<div class="blank"></div>
+<div class="message">
+    or you can just jump straight to
+    <a href="{% url 'msgr:main' %}">the app</a>.
+</div>
+<div class="blank"></div>
+<div class="message">
+    Have fun 😄
+</div>
 {% else %}
-<p>
-    Welcome, new user. Please
-    <a href="{% url 'login' %}">log in</a> or
-    <a href="{% url 'signup' %}">sign up</a>.
-</p>
+<div class="blank"></div>
+<div class="message">
+    Hi there 👋
+</div>
+<div class="blank"></div>
+<div class="message">
+    Welcome to MSGR!
+</div>
+<div class="blank"></div>
+<div class="message">
+    It's a small but fun web-based messenger. 😉
+</div>
+<div class="blank"></div>
+<div class="message">
+    You can
+    <a href="{% url 'login' %}">log in</a>.
+</div>
+<div class="blank"></div>
+<div class="message">
+    but if you don't have an account,<br>
+    just <a href="{% url 'signup' %}">click here</a>
+    to sign up right now!
+</div>
 {% endif %}
 
+{% endblock content %}
+
+{% block footer %}
+
+<footer>
+    <div id="footer">
+        <a href="https://github.com/aaronn44/msgr">
+            <i id="github" class="fa fa-github"> github</i>
+        </a>
+        <address id="me">
+            <a href="mailto:AaronTaajik@gmail.com">contact me</a>
+        </address>
+    </div>
+</footer>
+
+{% endblock footer %}
+
+{% block javascript %}
+<script src="{% static 'js/home.js' %}"></script>
 {% endblock %}

@@ -17,20 +17,22 @@
 
 <body>
     <div id="container">
+        {% block header %}
         <header>
             <div id="header">
-                {% block header %}
                 {% block h1 %}<h1>msgr</h1>{% endblock %}
                 {% include 'header.html' %}
-                {% endblock %}
             </div>
         </header>
+        {% endblock %}
         <main>
             <div id="content">
                 {% block content %}
                 {% endblock %}
             </div>
         </main>
+        {% block footer %}
+        {% endblock %}
     </div>
     <script src="{% static 'js/header-menu.js' %}"></script>
     {% block javascript %}

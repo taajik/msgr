@@ -1,0 +1,58 @@
+
+#container {
+    overflow: hidden;
+    height: 100vh;
+}
+
+div.blank {
+    clear: both;
+    transition: 3.5s;
+    height: 100vh;
+}
+
+div.message {
+    float: right;
+    clear: both;
+    overflow: hidden;
+    margin: 5px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #c2b280;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100vw;
+    height: 30px;
+}
+
+#footer {
+    height: 100%;
+    padding: 4px 10% 0;
+    font-size: large;
+    color: whitesmoke;
+    background-color: #2e1503;
+}
+
+#footer a {
+    text-decoration: none;
+    color: inherit;
+}
+
+#footer #github {
+    float: left;
+    padding-top: 1px;
+}
+
+#footer #me {
+    float: right;
+    font-family: serif;
+    font-style: normal;
+}
+
+@media screen and (min-width: 1000px) {
+    footer {
+        width: 30%;
+    }
+}
