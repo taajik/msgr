@@ -1,8 +1,10 @@
+# Project
 todo.txt
+media/profile_pics/
 
 # Env
-.env
-.venv
+.env/
+.venv/
 env/
 
 # Python

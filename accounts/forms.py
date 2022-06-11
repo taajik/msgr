@@ -31,4 +31,5 @@ class ProfileForm(forms.ModelForm):
             "last_name",
             "identifier",
             "biography",
+            "picture",
         )

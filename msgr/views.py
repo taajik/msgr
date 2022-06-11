@@ -26,14 +26,8 @@ from accounts.models import Profile
 class SearchFormMixin:
     """Include the form context data for search_form.html inclusion."""
 
-    def get_search_form(self):
-        kwargs = {}
-        if self.request.GET:
-            kwargs = {"data": self.request.GET}
-        return SearchForm(**kwargs)
-
     def get_context_data(self, **kwargs):
-        kwargs["search_form"] = self.get_search_form()
+        kwargs["search_form"] = SearchForm(self.request.GET)
         return super().get_context_data(**kwargs)
 
 
@@ -110,6 +104,7 @@ class ChatView(UserPassesTestMixin, DetailView):
     template_name = "msgr/chat_page.html"
     permission_denied_message = "Sorry, you can't access this chat."
     raise_exception = True
+    form_class = MessageForm
 
     def get_object(self, queryset=None):
         return get_object_or_404(Chat, pk=self.kwargs["pk"])
@@ -123,7 +118,7 @@ class ChatView(UserPassesTestMixin, DetailView):
         """Save a new message and record user's activity."""
         if request.POST.get("content"):
             # If it's a new message from submit, create the message.
-            form = self.get_form({"data": request.POST})
+            form = self.form_class(request.POST)
             if form.is_valid():
                 message = form.save(commit=False)
                 message.chat = self.object
@@ -143,14 +138,9 @@ class ChatView(UserPassesTestMixin, DetailView):
             request.user.joins.get(chat=self.object).update_last_active()
             return HttpResponse(status=204)
 
-    def get_form(self, kwargs=None):
-        if kwargs is None:
-            kwargs = {}
-        return MessageForm(**kwargs)
-
     def get_context_data(self, **kwargs):
         if "form" not in kwargs:
-            kwargs["form"] = self.get_form()
+            kwargs["form"] = self.form_class()
         return super().get_context_data(**kwargs)
 
 

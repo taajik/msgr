@@ -74,6 +74,8 @@ class Profile(models.Model):
                                   unique=True, blank=True, null=True,
                                   validators=[validate_id])
     biography = models.CharField("bio", max_length=200, blank=True)
+    picture = models.ImageField("pic", upload_to="profile_pics",
+                                blank=True, null=True)
 
     def get_full_name(self):
         """Return the first_name plus the last_name,

@@ -12,7 +12,7 @@
 
 <h1>Profile</h1>
 
-<form method="post" action="{% url 'profile' %}">
+<form enctype="multipart/form-data" method="post" action="{% url 'profile' %}">
     {{ form.non_field_errors }}
     {% csrf_token %}
     {% for field in form %}

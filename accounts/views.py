@@ -28,7 +28,7 @@ class SignupView(CreateView):
 
 
 class ProfileView(LoginRequiredMixin, UpdateView):
-    """Display the profile of the currently logged in user for editing."""
+    """Display profile fields of the currently logged in user for edit."""
 
     form_class = ProfileForm
     success_url = reverse_lazy("profile")
