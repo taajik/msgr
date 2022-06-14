@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load message_content_filters %}
 
 {% block style %}
 <link rel="stylesheet" href="{% static 'msgr/css/profile_page.css' %}">
@@ -17,12 +18,18 @@
 {% endif %}
 </h1>
 
+{% if object.picture %}
+    <img src="{{ object.picture.url }}" alt="profile picture" class="profile_pic">
+{% else %}
+    <img src="{% get_media_prefix %}profile_pics/avatar.png" alt="no profile picture" class="profile_pic">
+{% endif %}
+
 <p>
 {% if object.identifier %}
     @{{ object.identifier }}<br>
 {% endif %}
 {% if object.biography %}
-    {{ object.biography }}<br>
+    {{ object.biography|inline_id }}<br>
 {% endif %}
 </p>
 

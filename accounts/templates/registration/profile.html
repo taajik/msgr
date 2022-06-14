@@ -12,6 +12,12 @@
 
 <h1>Profile</h1>
 
+{% if object.picture %}
+    <img src="{{ user.profile.picture.url }}" alt="profile picture" class="profile_pic">
+{% else %}
+    <img src="{% get_media_prefix %}profile_pics/avatar.png" alt="no profile picture" class="profile_pic">
+{% endif %}
+
 <form enctype="multipart/form-data" method="post" action="{% url 'profile' %}">
     {{ form.non_field_errors }}
     {% csrf_token %}

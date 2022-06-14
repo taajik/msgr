@@ -1,6 +1,5 @@
 
 #content {
-    padding-top: 10%;
     text-align: center;
 }
 
@@ -11,6 +10,6 @@ div.form-field {
 
 @media screen and (min-width: 1000px) {
     #content {
-        padding-top: 35%;
+        padding-top: 15%;
     }
 }
