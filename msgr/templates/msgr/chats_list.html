@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load image_url_tags %}
 
 {% block style %}
 <link rel="stylesheet" href="{% static 'msgr/css/chats_list.css' %}">
@@ -15,6 +16,7 @@
 
 {% for join in join_list %}
 <div class="chat">
+    <img src="{% get_profile_pic join.picture True %}" alt="profile thumbnail" class="thumbnail">
     <div class="chat-title">
         <a href="{% url 'msgr:chat' join.chat.pk %}">{{ join.title }}</a>
     </div>

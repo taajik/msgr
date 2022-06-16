@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load image_url_tags %}
 {% load message_content_filters %}
 
 {% block style %}
@@ -18,11 +19,7 @@
 {% endif %}
 </h1>
 
-{% if object.picture %}
-    <img src="{{ object.picture.url }}" alt="profile picture" class="profile_pic">
-{% else %}
-    <img src="{% get_media_prefix %}profile_pics/avatar.png" alt="no profile picture" class="profile_pic">
-{% endif %}
+<img src="{% get_profile_pic object.picture %}" alt="profile picture" class="profile_pic">
 
 <p>
 {% if object.identifier %}

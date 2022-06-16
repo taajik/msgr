@@ -55,11 +55,20 @@ hr {
     background-color: #410200;
 }
 
+img {
+    object-fit: cover;
+}
+
 img.profile_pic {
-    object-fit: none;
     width: 300px;
     height: 300px;
     border-radius: 40%;
+}
+
+img.thumbnail {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
 }
 
 @media screen and (min-width: 1000px) {

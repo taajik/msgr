@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load image_url_tags %}
 
 {% block style %}
 <link rel="stylesheet" href="{% static 'msgr/css/search_form.css' %}">
@@ -15,6 +16,7 @@
 <ul>
 {% for user in profile_list %}
     <li>
+        <img src="{% get_profile_pic user.picture True %}" alt="profile thumbnail" class="thumbnail">
         <a href="{% url 'msgr:profile' user.pk %}">{{ user.get_full_name }}</a>
     </li>
 {% endfor %}

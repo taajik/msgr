@@ -52,6 +52,15 @@ class Join(models.Model):
         else:
             return "Saved Messages"
 
+    @property
+    def picture(self):
+        """Return a picture for the chat's entry."""
+        other = self.get_receivers()
+        if other:
+            return other.get().profile.picture
+        else:
+            return self.user.profile.picture
+
     def get_receivers(self):
         """Return all other users that are in the same chat."""
         return self.chat.participants.exclude(pk=self.user.pk)
