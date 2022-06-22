@@ -13,17 +13,29 @@
 
 <h1>Profile</h1>
 
-<img src="{% get_profile_pic object.picture %}" alt="profile picture" class="profile_pic">
+<label for="id_picture">
+    <img src="{% get_profile_pic object.picture %}" alt="profile picture" class="profile_pic">
+</label>
 
 <form enctype="multipart/form-data" method="post" action="{% url 'profile' %}">
     {{ form.non_field_errors }}
     {% csrf_token %}
+    <input type="file" name="picture" accept="image/*" id="id_picture" style="display: none;">
+    {% if object.picture %}
+    <input type="checkbox" name="picture-clear" id="picture-clear_id">
+    <label for="picture-clear_id">
+        <i class="fa fa-trash-o" style="font-size: larger;"></i>
+    </label>
+    {% endif %}
+
     {% for field in form %}
-    <div class="form-field">
-        {{ field.errors }}
-        {{ field.label_tag }}<br>
-        {{ field }}
-    </div>
+        {% if field.name != 'picture' %}
+        <div class="form-field">
+            {{ field.errors }}
+            {{ field.label_tag }}<br>
+            {{ field }}
+        </div>
+        {% endif %}
     {% endfor %}
 
     <br>

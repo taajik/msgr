@@ -1,6 +1,7 @@
 # Project
 todo.txt
-media/profile_pics/
+media/profile_pics/*
+!media/profile_pics/avatar.png
 
 # Env
 .env/

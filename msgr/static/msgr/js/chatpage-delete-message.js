@@ -3,7 +3,7 @@ var modal = $('#delete-confirm');
 
 function open_modal(message) {
     $('#delete-pk').val(message);
-    $('#m-'+message).css('background-color', '#618d3d');
+    $('#m-'+message).css('background-color', '#6A8256');
     modal.css('display', 'block');
 }
 

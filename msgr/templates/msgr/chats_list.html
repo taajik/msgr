@@ -16,10 +16,20 @@
 
 {% for join in join_list %}
 <div class="chat">
-    <img src="{% get_profile_pic join.picture True %}" alt="profile thumbnail" class="thumbnail">
+    {% with profile=join.get_profile %}
+    <a href="{% url 'msgr:profile' profile.pk %}">
+        <img src="{% get_profile_pic profile.picture True %}" alt="profile thumbnail" class="thumbnail">
+    </a>
     <div class="chat-title">
-        <a href="{% url 'msgr:chat' join.chat.pk %}">{{ join.title }}</a>
+        <a href="{% url 'msgr:chat' join.chat.pk %}">
+            {% if profile != user.profile %}
+                {{ profile.get_full_name }}
+            {% else %}
+                Saved Messages
+            {% endif %}
+        </a>
     </div>
+    {% endwith %}
     {% with unread_count=join.get_unread_count %}
     {% if unread_count %}
     <div class="unread-count">

@@ -1,4 +1,8 @@
 
+a {
+    text-decoration: none;
+}
+
 div.chat {
     padding: 12px 8%;
     border-radius: 5px;
@@ -10,15 +14,15 @@ div.chat:hover {
 
 div.chat-title {
     display: inline;
+    vertical-align: middle;
 }
 
 div.chat-title a {
     display: inline-block;
     overflow: hidden;
-    max-width: 60%;
+    max-width: 50%;
     white-space: nowrap;
     text-overflow: ellipsis;
-    text-decoration: none;
 }
 
 div.unread-count {
@@ -34,6 +38,6 @@ div.unread-count {
 
 div.chat-date {
     float: right;
-    padding: 4px;
+    padding: 8px 4px;
     font-size: small;
 }
