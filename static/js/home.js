@@ -9,4 +9,6 @@ function remove_blank(i) {
     }
 };
 
-remove_blank(0);
+$(document).ready(function() {
+    remove_blank(0);
+});

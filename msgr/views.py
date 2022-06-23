@@ -98,21 +98,26 @@ class ProfilePageView(DetailView):
         return HttpResponseRedirect(reverse("msgr:chat", args=[chat.pk]))
 
 
-class ChatView(UserPassesTestMixin, DetailView):
-    """A chat page that contains messages."""
+class UserInChatTestMixin(UserPassesTestMixin):
+    """Only allow users who are present in a chat to
+    access the view that inherits this mixin.
+    """
 
-    template_name = "msgr/chat_page.html"
     permission_denied_message = "Sorry, you can't access this chat."
-    raise_exception = True
-    form_class = MessageForm
 
     def get_object(self, queryset=None):
         return get_object_or_404(Chat, pk=self.kwargs["pk"])
 
     def test_func(self):
-        """Only users that are in this chat can access this page."""
         self.object = self.get_object()
         return self.object.participants.filter(pk=self.request.user.pk).exists()
+
+
+class ChatView(UserInChatTestMixin, DetailView):
+    """A chat page that contains messages."""
+
+    template_name = "msgr/chat_page.html"
+    form_class = MessageForm
 
     def post(self, request, *args, **kwargs):
         """Save a new message and record user's activity."""
@@ -144,20 +149,13 @@ class ChatView(UserPassesTestMixin, DetailView):
         return super().get_context_data(**kwargs)
 
 
-class ChatMessagesView(UserPassesTestMixin, MultipleObjectMixin, View):
+class ChatMessagesView(UserInChatTestMixin, MultipleObjectMixin, View):
     """Paginate messages and return rendered result in json."""
 
     paginate_by = 20
 
-    def get_chat(self):
-        return get_object_or_404(Chat, pk=self.kwargs["pk"])
-
-    def test_func(self):
-        self.chat = self.get_chat()
-        return self.chat.participants.filter(pk=self.request.user.pk).exists()
-
     def get_queryset(self):
-        return self.chat.messages.reverse()
+        return self.object.messages.reverse()
 
     def get(self, request, *args, **kwargs):
         # The full queryset:
@@ -190,15 +188,8 @@ class ChatMessagesView(UserPassesTestMixin, MultipleObjectMixin, View):
         })
 
 
-class ChatUpdatesView(UserPassesTestMixin, View):
+class ChatUpdatesView(UserInChatTestMixin, View):
     """Return updates about a chat in json."""
-
-    def get_chat(self):
-        return get_object_or_404(Chat, pk=self.kwargs["pk"])
-
-    def test_func(self):
-        self.chat = self.get_chat()
-        return self.chat.participants.filter(pk=self.request.user.pk).exists()
 
     def get(self, request, *args, **kwargs):
         if request.GET:
@@ -239,7 +230,7 @@ class ChatUpdatesView(UserPassesTestMixin, View):
 
         if not latest_pk:
             latest_pk = "0"
-        new_messages = self.chat.messages.filter(pk__gt=latest_pk)
+        new_messages = self.object.messages.filter(pk__gt=latest_pk)
         new_messages_rendered = ""
 
         if new_messages.exists():
@@ -265,9 +256,9 @@ class ChatUpdatesView(UserPassesTestMixin, View):
 
         if not latest_seen_pk:
             latest_seen_pk = "0"
-        seen_messages = self.chat.messages.filter(pk__gt=latest_seen_pk,
-                                                  sender=self.request.user,
-                                                  is_seen=True)
+        seen_messages = self.object.messages.filter(pk__gt=latest_seen_pk,
+                                                    sender=self.request.user,
+                                                    is_seen=True)
         seen_messages_pk = []
 
         if seen_messages.exists():

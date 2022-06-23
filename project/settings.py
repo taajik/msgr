@@ -129,7 +129,12 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+# Authentication
+
 AUTH_USER_MODEL = 'accounts.User'
+
+LOGIN_URL = 'login'
+
 
 # Load local settings if a local_settings.py file exists.
 try:

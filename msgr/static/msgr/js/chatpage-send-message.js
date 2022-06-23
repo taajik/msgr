@@ -2,7 +2,7 @@
 $('#message-form').on('submit', function(event) {
     event.preventDefault();
     send_message(this);
-    window.scrollTo(0, 0);
+    $(window).scrollTop(0);
 });
 
 function send_message(form) {

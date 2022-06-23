@@ -25,7 +25,9 @@ function load_messages() {
     });
 }
 
-load_messages();
+$(document).ready(function() {
+    load_messages();
+});
 
 $(window).scroll(function() {
     if ($(window).scrollTop() >= ($(document).height() - $(window).outerHeight(true) - 1)) {
