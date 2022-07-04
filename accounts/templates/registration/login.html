@@ -12,6 +12,10 @@
 
 <h1>Log In</h1>
 
+{% if user.is_authenticated %}
+    <p>You are already logged in.</p>
+{% endif %}
+
 {% if next %}
     {% if user.is_authenticated %}
         <p>Your account doesn't have access to this page. To proceed,
