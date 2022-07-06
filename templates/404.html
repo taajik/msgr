@@ -5,14 +5,14 @@
 <link rel="stylesheet" href="{% static 'css/error.css' %}">
 {% endblock %}
 
-{% block title %}403 - msgr{% endblock %}
-{% block h1 %}<h1>Forbidden</h1>{% endblock %}
+{% block title %}404 - msgr{% endblock %}
+{% block h1 %}<h1>Not Found</h1>{% endblock %}
 
 {% block content %}
 
-<img src="{% static 'img/403.png' %}" alt="403" class="error-code">
+<img src="{% static 'img/404.png' %}" alt="404" class="error-code">
 
-<p>Permission denied.</p>
+<p>Oops! The link is broken or the page you were looking for doesn't exist.</p>
 
 {% if exception %}
     <p>{{ exception }}</p>

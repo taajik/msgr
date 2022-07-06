@@ -1,0 +1,11 @@
+
+#content {
+    text-align: center;
+    font-size: larger;
+}
+
+img.error-code {
+    margin-bottom: 20px;
+    width: 100%;
+    height: 100%;
+}

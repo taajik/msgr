@@ -14,7 +14,7 @@
 <h1>Profile</h1>
 
 <label for="id_picture">
-    <img src="{% get_profile_pic object.picture %}" alt="profile picture" class="profile_pic">
+    <img src="{% get_profile_pic object.picture %}" alt="profile picture" class="profile-pic">
 </label>
 
 <form enctype="multipart/form-data" method="post" action="{% url 'profile' %}">
