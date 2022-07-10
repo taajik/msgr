@@ -14,7 +14,7 @@
 <h1>Profile</h1>
 
 <label for="id_picture">
-    <img src="{% get_profile_pic object.picture %}" alt="profile picture" class="profile-pic">
+    <img src="{% get_profile_pic object.picture %}" alt="profile picture" id="the-picture" class="profile-pic">
 </label>
 
 <form enctype="multipart/form-data" method="post" action="{% url 'profile' %}">
@@ -42,4 +42,8 @@
     <input type="submit" value="Save">
 </form>
 
+{% endblock %}
+
+{% block javascript %}
+<script src="{% static 'accounts/js/profile-change-picture.js' %}"></script>
 {% endblock %}
