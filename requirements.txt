@@ -2,5 +2,5 @@ asgiref==3.5.0
 backports.zoneinfo==0.2.1
 Django==4.0.6
 Pillow==9.1.1
-psycopg2==2.9.3
+psycopg2==2.9.3     # this one is only required if your DB is PostgreSQL.
 sqlparse==0.4.2

@@ -25,7 +25,7 @@ It has the basic features expected from a minimum messenger app:
 
 ## Installation
 
-First, as usual, you need to clone the project and install the requirements (psycopg2 is only required for PostgreSQL).
+First, as usual, you need to clone the project and install the requirements.
 
 Then you have to set up the settings.
 They are located at [project/settings](/project/settings). There are different setting files there.
